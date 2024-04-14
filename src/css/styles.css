@@ -130,6 +130,7 @@ animation: pencilRot 4s linear infinite;
 }
 
 .btn {
+  cursor: pointer;
   border: transparent;
   border-radius: 8px;
   padding: 8px 16px;
@@ -190,6 +191,7 @@ animation: pencilRot 4s linear infinite;
 }
 
 .btn-load {
+  cursor: pointer;
   border-radius: 8px;
   border: transparent;
   padding: 8px 16px;

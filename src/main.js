@@ -35,7 +35,7 @@ elem.form.addEventListener("submit", loadImages);
 elem.button.addEventListener("click", loadPages);
 
 function loadImages(e) {
-  e.preventDefault();
+  e.preventDefault()
 
   page = 1;
   elem.gallery.innerHTML = '';
@@ -54,21 +54,19 @@ function loadImages(e) {
 };
 
 async function loadPages() {
-  const images = await fetchingFrom();
-  const totalPages = Math.ceil(images.totalHits / limit);
-  page += 1;
+  try {
+    const images = await fetchingFrom();
+    const totalPages = Math.ceil(images.totalHits / limit);
+    page += 1;
 
-  if (images.hits.length === 0) {
-    displayToast("Sorry, there are no images matching your search query. Please try again!");
-  }
-
-  else if (page >= totalPages) {
-    displayToast("We're sorry, but you've reached the end of search results.");
-    hideButton();
-    hideLoading();
-  }
-  else {
-    try {
+    if (images.hits.length === 0) {
+      displayToast("Sorry, there are no images matching your search query. Please try again!");
+      hideLoading();
+    } else if (page >= totalPages) {
+      render(images);
+      hideButton();
+      hideLoading();
+    } else {
       render(images);
       hideLoading();
 
@@ -76,19 +74,21 @@ async function loadPages() {
         showButton();
       }
     }
-    catch (error) {
-      console.log(error);
+
+    const item = document.querySelector('.gallery-item');
+    if (item) {
+      const rect = item.getBoundingClientRect();
+      window.scrollBy({
+        top: rect.height * 2,
+        behavior: 'smooth',
+      });
     }
+
+    elem.form.reset();
+  } catch (error) {
+    console.error("Error loading images:", error);
+    hideLoading(); 
   }
-
-  const item = document.querySelector('.gallery-item');
-  const rect = item.getBoundingClientRect();
-  window.scrollBy({
-    top: rect.height * 2,
-    behavior: 'smooth',
-  });
-
-  elem.form.reset();
 };
 
 
